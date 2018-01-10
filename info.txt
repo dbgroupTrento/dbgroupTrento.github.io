@@ -1,8 +1,0 @@
-All tweets produced since the launch of the company in 2006 are now 
-indexed and searchable. For further details: 
-https://blog.twitter.com/2014/building-a-complete-tweet-index
-
-The search interface is available at:
-https://twitter.com/search-advanced
-
-Cristian
