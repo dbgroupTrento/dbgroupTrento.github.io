@@ -1,0 +1,139 @@
+-- MySQL dump 10.13  Distrib 5.1.69, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: twitter
+-- ------------------------------------------------------
+-- Server version	5.1.69-0ubuntu0.11.10.1
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO,POSTGRESQL' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table "hashtag"
+--
+
+DROP TABLE IF EXISTS "hashtag";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "hashtag" (
+  "id" bigint(20) unsigned NOT NULL,
+  "hashtag" varchar(160) NOT NULL,
+  "partitioning_value" smallint(5) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY ("id","partitioning_value"),
+  UNIQUE KEY "UNIQUE" ("hashtag","partitioning_value")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table "tweet"
+--
+
+DROP TABLE IF EXISTS "tweet";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "tweet" (
+  "id" bigint(20) unsigned NOT NULL,
+  "user_id" bigint(20) unsigned NOT NULL,
+  "in_reply_to_status_id" bigint(20) unsigned NOT NULL DEFAULT '0',
+  "in_reply_to_user_id" bigint(20) unsigned NOT NULL DEFAULT '0',
+  "favorited" tinyint(1) NOT NULL DEFAULT '0',
+  "retweeted" tinyint(1) NOT NULL DEFAULT '0',
+  "retweet_count" int(10) unsigned NOT NULL DEFAULT '0',
+  "lang" char(2) NOT NULL DEFAULT '--',
+  "created_at" datetime NOT NULL,
+  PRIMARY KEY ("id","user_id"),
+  KEY "USER_ID" ("user_id"),
+  KEY "DATE" ("created_at")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table "tweet_hashtag"
+--
+
+DROP TABLE IF EXISTS "tweet_hashtag";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "tweet_hashtag" (
+  "tweet_id" bigint(20) unsigned NOT NULL,
+  "user_id" bigint(20) unsigned NOT NULL,
+  "hashtag_id" bigint(20) unsigned NOT NULL,
+  PRIMARY KEY ("tweet_id","user_id","hashtag_id")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table "tweet_text"
+--
+
+DROP TABLE IF EXISTS "tweet_text";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "tweet_text" (
+  "tweet_id" bigint(20) unsigned NOT NULL,
+  "user_id" bigint(20) unsigned NOT NULL,
+  "text" varchar(160) NOT NULL DEFAULT '',
+  "geo_lat" decimal(18,12) NOT NULL DEFAULT '0.000000000000',
+  "geo_long" decimal(18,12) NOT NULL DEFAULT '0.000000000000',
+  "place_full_name" varchar(160) DEFAULT NULL,
+  "place_id" varchar(160) DEFAULT NULL,
+  PRIMARY KEY ("tweet_id","user_id")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table "tweet_url"
+--
+
+DROP TABLE IF EXISTS "tweet_url";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "tweet_url" (
+  "tweet_id" bigint(20) unsigned NOT NULL,
+  "user_id" bigint(20) unsigned NOT NULL,
+  "progressive" smallint(5) unsigned NOT NULL,
+  "url" text,
+  PRIMARY KEY ("tweet_id","user_id","progressive")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table "user"
+--
+
+DROP TABLE IF EXISTS "user";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE "user" (
+  "id" bigint(20) unsigned NOT NULL,
+  "screen_name" varchar(45) NOT NULL,
+  "name" varchar(160) NOT NULL,
+  "verified" tinyint(1) NOT NULL DEFAULT '0',
+  "protected" tinyint(1) NOT NULL DEFAULT '0',
+  "followers_count" int(10) unsigned NOT NULL DEFAULT '0',
+  "friends_count" int(10) unsigned NOT NULL DEFAULT '0',
+  "statuses_count" int(10) unsigned NOT NULL DEFAULT '0',
+  "favourites_count" int(10) unsigned NOT NULL DEFAULT '0',
+  "location" varchar(160) DEFAULT NULL,
+  "utc_offset" int(11) NOT NULL DEFAULT '0',
+  "time_zone" varchar(45) DEFAULT NULL,
+  "geo_enabled" tinyint(1) NOT NULL DEFAULT '0',
+  "lang" char(2) NOT NULL DEFAULT '--',
+  "description" varchar(160) DEFAULT NULL,
+  "url" varchar(160) DEFAULT NULL,
+  "created_at" datetime NOT NULL,
+  PRIMARY KEY ("id"),
+  KEY "LANG" ("lang")
+);
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-07-14 16:08:10
